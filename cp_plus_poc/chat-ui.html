@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="CP Plus AI-powered bid management assistant for RFP analysis, product matching, and compliance cross-matching. Powered by IBM watsonx Orchestrate.">
+    <title>CP Plus Agentic Suite — AI Bid Manager</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --cp-dark: #000000;
+            --cp-surface: #0A0A0A;
+            --cp-surface-2: #141414;
+            --cp-border: rgba(255, 255, 255, 0.08);
+            --cp-text: #F0F0F0;
+            --cp-text-dim: #888888;
+            --cp-white: #FFFFFF;
+            --cp-accent: #CCCCCC;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: var(--cp-dark);
+            color: var(--cp-text);
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ── Subtle Grid Background ── */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background:
+                linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+            background-size: 60px 60px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* ── Header ── */
+        header {
+            position: relative;
+            z-index: 10;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            padding: 1rem 2.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid var(--cp-border);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-mark {
+            width: 36px;
+            height: 36px;
+            background: var(--cp-white);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            font-size: 14px;
+            color: #000;
+            letter-spacing: -0.5px;
+        }
+
+        .logo-text {
+            font-weight: 700;
+            font-size: 18px;
+            letter-spacing: -0.3px;
+            color: var(--cp-white);
+        }
+
+        .logo-text span {
+            color: var(--cp-text-dim);
+            font-weight: 400;
+            margin-left: 6px;
+        }
+
+        .header-badges {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .badge {
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .badge-live {
+            background: rgba(255, 255, 255, 0.06);
+            color: #AAAAAA;
+            border: 1px solid var(--cp-border);
+        }
+
+        .badge-live::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            background: var(--cp-white);
+            border-radius: 50%;
+            animation: pulse-dot 2s ease-in-out infinite;
+        }
+
+        .badge-ibm {
+            background: rgba(255, 255, 255, 0.04);
+            color: var(--cp-text-dim);
+            border: 1px solid var(--cp-border);
+        }
+
+        @keyframes pulse-dot {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.3;
+            }
+        }
+
+        /* ── Main Content ── */
+        main {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            z-index: 1;
+            padding: 2rem;
+        }
+
+        .hero {
+            text-align: center;
+            max-width: 720px;
+            animation: fadeUp 0.8s ease-out;
+        }
+
+        .hero-eyebrow {
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--cp-text-dim);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .hero-eyebrow::before,
+        .hero-eyebrow::after {
+            content: '';
+            width: 30px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2));
+        }
+
+        .hero-eyebrow::after {
+            background: linear-gradient(90deg, rgba(255, 255, 255, 0.2), transparent);
+        }
+
+        h1 {
+            font-size: clamp(36px, 5vw, 56px);
+            font-weight: 900;
+            line-height: 1.1;
+            letter-spacing: -2px;
+            margin-bottom: 18px;
+            background: linear-gradient(180deg, #fff 30%, #666 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-sub {
+            font-size: 16px;
+            color: var(--cp-text-dim);
+            line-height: 1.7;
+            max-width: 520px;
+            margin: 0 auto 48px;
+        }
+
+        /* ── Feature Cards ── */
+        .features {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-bottom: 40px;
+        }
+
+        .feature-card {
+            background: var(--cp-surface);
+            border: 1px solid var(--cp-border);
+            border-radius: 16px;
+            padding: 24px 20px;
+            text-align: left;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.1), transparent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .feature-card:hover {
+            border-color: rgba(255, 255, 255, 0.15);
+            transform: translateY(-3px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .feature-card:hover::before {
+            opacity: 1;
+        }
+
+        .feature-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            margin-bottom: 14px;
+            background: var(--cp-surface-2);
+            border: 1px solid var(--cp-border);
+        }
+
+        .feature-title {
+            font-weight: 700;
+            font-size: 14px;
+            margin-bottom: 6px;
+            color: #fff;
+        }
+
+        .feature-desc {
+            font-size: 12px;
+            color: var(--cp-text-dim);
+            line-height: 1.5;
+        }
+
+        /* ── Demo Disclaimer ── */
+        .demo-banner {
+            background: var(--cp-surface);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 12px 20px;
+            margin-bottom: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            font-size: 12px;
+            color: var(--cp-text-dim);
+            animation: fadeUp 1s ease-out;
+        }
+
+        .demo-banner .demo-icon {
+            font-size: 16px;
+        }
+
+        .demo-banner strong {
+            color: var(--cp-white);
+            font-weight: 600;
+        }
+
+        /* ── CTA Hint ── */
+        .cta-hint {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            animation: fadeUp 1.2s ease-out;
+        }
+
+        .cta-text {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--cp-white);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .cta-text .arrow {
+            display: inline-block;
+            animation: bounce-right 1.5s ease-in-out infinite;
+            font-size: 18px;
+        }
+
+        /* ── Animated Pointer to Chat Widget ── */
+        .chat-pointer {
+            position: fixed;
+            bottom: 28px;
+            right: 90px;
+            z-index: 9998;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            animation: fadeInPointer 1.5s ease-out 2s both, float-pointer 3s ease-in-out 3.5s infinite;
+        }
+
+        .pointer-label {
+            background: var(--cp-white);
+            color: #000;
+            padding: 10px 18px;
+            border-radius: 12px;
+            font-size: 13px;
+            font-weight: 700;
+            white-space: nowrap;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+            position: relative;
+        }
+
+        .pointer-label::after {
+            content: '';
+            position: absolute;
+            right: -6px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 0;
+            height: 0;
+            border-top: 6px solid transparent;
+            border-bottom: 6px solid transparent;
+            border-left: 6px solid var(--cp-white);
+        }
+
+        .pointer-arrow {
+            font-size: 22px;
+            animation: bounce-right 1s ease-in-out infinite;
+        }
+
+        /* ── Animations ── */
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(24px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInPointer {
+            from {
+                opacity: 0;
+                transform: translateX(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes float-pointer {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-6px);
+            }
+        }
+
+        @keyframes bounce-right {
+
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+
+            50% {
+                transform: translateX(6px);
+            }
+        }
+
+        /* ── Responsive ── */
+        @media (max-width: 640px) {
+            .features {
+                grid-template-columns: 1fr;
+            }
+
+            header {
+                padding: 1rem 1.2rem;
+            }
+
+            .header-badges {
+                display: none;
+            }
+
+            .chat-pointer {
+                right: 70px;
+                bottom: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="logo">
+            <div class="logo-mark">CP</div>
+            <div class="logo-text">CP Plus<span>Agentic Suite</span></div>
+        </div>
+        <div class="header-badges">
+            <div class="badge badge-ibm">IBM watsonx Orchestrate</div>
+            <div class="badge badge-live">System Online</div>
+        </div>
+    </header>
+
+    <main>
+        <div class="hero">
+            <div class="hero-eyebrow">AI-Powered Bid Intelligence</div>
+            <h1>Intelligent Bid Management</h1>
+            <p class="hero-sub">
+                Upload RFP documents, query the CP Plus product catalog, and generate automated compliance matrices —
+                all through a single AI-powered conversation.
+            </p>
+
+            <div class="features">
+                <div class="feature-card">
+                    <div class="feature-icon">📄</div>
+                    <div class="feature-title">RFP Analysis</div>
+                    <div class="feature-desc">Extract technical specs, BOQ, eligibility criteria, and deadlines from any
+                        tender PDF.</div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔍</div>
+                    <div class="feature-title">Product Search</div>
+                    <div class="feature-desc">Query the full CP Plus catalog with AI-powered semantic search across
+                        datasheets.</div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">✅</div>
+                    <div class="feature-title">Compliance Matching</div>
+                    <div class="feature-desc">Auto-generate strict feature-by-feature compliance matrices against RFP
+                        requirements.</div>
+                </div>
+            </div>
+
+            <div class="demo-banner">
+                <span class="demo-icon">⚠️</span>
+                <span><strong>Demo Environment</strong> — This is a Proof of Concept (PoC). Since the full application
+                    has not been officially adopted, this build is not 100% complete. Occasional AI hallucination is
+                    expected.</span>
+            </div>
+
+            <div class="cta-hint">
+                <div class="cta-text">
+                    Click the chat icon in the bottom right to start
+                    <span class="arrow">→</span>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Animated Pointer to Chat Widget -->
+    <div class="chat-pointer" id="chatPointer">
+        <div class="pointer-label">💬 Start here</div>
+        <div class="pointer-arrow">👉</div>
+    </div>
+
+    <!-- Watsonx Orchestrate Embed Code -->
+    <script>
+        window.wxOConfiguration = {
+            orchestrationID: "20250731-1611-5869-4024-6e99f4269f1b_20251013-0928-4707-90f5-b7083dde17bd",
+            hostURL: "https://ap-southeast-1.dl.watson-orchestrate.ibm.com",
+            rootElementID: "root",
+            showLauncher: true,
+            chatOptions: {
+                agentId: "62d46e48-fd30-4995-a97f-4e52cc7c1d08",
+                agentEnvironmentId: "797b0065-b68f-4225-a3ee-28897a8a892b"
+            }
+        };
+
+        setTimeout(function () {
+            const script = document.createElement('script');
+            script.src = `${window.wxOConfiguration.hostURL}/wxochat/wxoLoader.js?embed=true`;
+            script.addEventListener('load', function () {
+                wxoLoader.init();
+            });
+            document.head.appendChild(script);
+        }, 0);
+
+        // Hide the pointer after user clicks near the chat widget
+        document.addEventListener('click', function (e) {
+            const pointer = document.getElementById('chatPointer');
+            if (pointer && (e.clientX > window.innerWidth - 200 && e.clientY > window.innerHeight - 200)) {
+                pointer.style.transition = 'opacity 0.5s ease';
+                pointer.style.opacity = '0';
+                setTimeout(() => pointer.style.display = 'none', 500);
+            }
+        });
+    </script>
+</body>
+
+</html>

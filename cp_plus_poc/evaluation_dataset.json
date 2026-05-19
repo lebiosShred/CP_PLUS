@@ -1,0 +1,197 @@
+[
+    {
+        "id": "rfp_emd_query",
+        "user_query": "What is the EMD for the Bhuj Airport RFP?",
+        "expected_tool": "analyze_rfp",
+        "expected_params": {
+            "action": "rfp_chat",
+            "fileName": "Airport - Bhuj-RFP.pdf",
+            "query": "What is the EMD?"
+        },
+        "expected_answer_contains": [
+            "EMD"
+        ],
+        "category": "rfp_analysis"
+    },
+    {
+        "id": "rfp_list_files",
+        "user_query": "Show me all available RFP documents",
+        "expected_tool": "analyze_rfp",
+        "expected_params": {
+            "action": "list_rfps"
+        },
+        "expected_answer_contains": [
+            ".pdf"
+        ],
+        "category": "rfp_analysis"
+    },
+    {
+        "id": "rfp_tech_specs",
+        "user_query": "Extract the technical specifications section from the Bhuj Airport tender",
+        "expected_tool": "analyze_rfp",
+        "expected_params": {
+            "action": "rfp_focus_section",
+            "fileName": "Airport - Bhuj-RFP.pdf",
+            "sectionTitle": "Technical Specifications"
+        },
+        "expected_answer_contains": [
+            "specification"
+        ],
+        "category": "rfp_analysis"
+    },
+    {
+        "id": "product_full_specs",
+        "user_query": "Give me the full specifications of CP-UNC-DA21L3C-Q",
+        "expected_tool": "lookup_product",
+        "expected_params": {
+            "action": "product_chat",
+            "query": "Full specs of CP-UNC-DA21L3C-Q"
+        },
+        "expected_answer_contains": [
+            "resolution",
+            "lens"
+        ],
+        "category": "product_lookup"
+    },
+    {
+        "id": "product_list_catalog",
+        "user_query": "What products do you have in the catalog?",
+        "expected_tool": "lookup_product",
+        "expected_params": {
+            "action": "list_products"
+        },
+        "expected_answer_contains": [
+            "CP-"
+        ],
+        "category": "product_lookup"
+    },
+    {
+        "id": "product_feature_search",
+        "user_query": "Which CP Plus cameras have IP67 rating and 8MP resolution?",
+        "expected_tool": "lookup_product",
+        "expected_params": {
+            "action": "product_search",
+            "query": "IP67 8MP camera"
+        },
+        "expected_answer_contains": [
+            "IP67"
+        ],
+        "category": "product_lookup"
+    },
+    {
+        "id": "product_recommendation",
+        "user_query": "Recommend the best dome camera for outdoor use with night vision",
+        "expected_tool": "lookup_product",
+        "expected_params": {
+            "action": "product_chat",
+            "query": "best dome camera outdoor night vision"
+        },
+        "expected_answer_contains": [
+            "dome",
+            "IR"
+        ],
+        "category": "product_lookup"
+    },
+    {
+        "id": "matcher_full_crossmatch",
+        "user_query": "Generate a full compliance matrix for the Bhuj Airport RFP",
+        "expected_tool": "match_compliance",
+        "expected_params": {
+            "action": "crossmatch_rfp",
+            "fileName": "Airport - Bhuj-RFP.pdf",
+            "query": "Generate full compliance matrix"
+        },
+        "expected_answer_contains": [
+            "compliance",
+            "Compliant"
+        ],
+        "category": "compliance_matching"
+    },
+    {
+        "id": "matcher_gap_analysis",
+        "user_query": "Show me only the gaps and non-compliant items for the Bhuj Airport tender",
+        "expected_tool": "match_compliance",
+        "expected_params": {
+            "action": "crossmatch_rfp",
+            "fileName": "Airport - Bhuj-RFP.pdf",
+            "query": "Show only gaps"
+        },
+        "expected_answer_contains": [
+            "gap",
+            "Non-Compliant"
+        ],
+        "category": "compliance_matching"
+    },
+    {
+        "id": "matcher_specific_product",
+        "user_query": "Check if CP-UNC-DA21L3C-Q meets the requirements in the Bhuj Airport RFP",
+        "expected_tool": "match_compliance",
+        "expected_params": {
+            "action": "matcher_chat",
+            "fileName": "Airport - Bhuj-RFP.pdf",
+            "query": "Check CP-UNC-DA21L3C-Q against this RFP"
+        },
+        "expected_answer_contains": [
+            "CP-UNC-DA21L3C-Q"
+        ],
+        "category": "compliance_matching"
+    },
+    {
+        "id": "ambiguous_rfp_not_matcher",
+        "user_query": "What camera specs are required in the Bhuj Airport RFP?",
+        "expected_tool": "analyze_rfp",
+        "expected_params": {
+            "action": "rfp_chat",
+            "fileName": "Airport - Bhuj-RFP.pdf",
+            "query": "What camera specs are required?"
+        },
+        "expected_answer_contains": [
+            "camera",
+            "specification"
+        ],
+        "category": "routing_accuracy",
+        "notes": "Should route to analyze_rfp NOT match_compliance — user is asking about RFP content, not comparing products."
+    },
+    {
+        "id": "ambiguous_product_not_matcher",
+        "user_query": "Does the CP-UNC-DA21L3C-Q have WDR?",
+        "expected_tool": "lookup_product",
+        "expected_params": {
+            "action": "product_chat",
+            "query": "Does CP-UNC-DA21L3C-Q have WDR?"
+        },
+        "expected_answer_contains": [
+            "WDR"
+        ],
+        "category": "routing_accuracy",
+        "notes": "Should route to lookup_product NOT match_compliance — user is asking about a product spec, not comparing against an RFP."
+    },
+    {
+        "id": "ambiguous_needs_both",
+        "user_query": "Compare the CP Plus PTZ cameras against the airport tender requirements",
+        "expected_tool": "match_compliance",
+        "expected_params": {
+            "action": "matcher_chat",
+            "fileName": "Airport - Bhuj-RFP.pdf",
+            "query": "Compare PTZ cameras against this RFP"
+        },
+        "expected_answer_contains": [
+            "PTZ",
+            "compliance"
+        ],
+        "category": "routing_accuracy",
+        "notes": "Should route to match_compliance — user is explicitly comparing products AGAINST an RFP."
+    },
+    {
+        "id": "fallback_clarification",
+        "user_query": "Analyze this document",
+        "expected_tool": "analyze_rfp",
+        "expected_params": {
+            "action": "rfp_chat",
+            "query": "Analyze this document"
+        },
+        "expected_answer_contains": [],
+        "category": "routing_accuracy",
+        "notes": "Vague query — agent should either ask for clarification or default to analyze_rfp."
+    }
+]

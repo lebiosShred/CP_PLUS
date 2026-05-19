@@ -1,0 +1,289 @@
+openapi: "3.0.3"
+info:
+  title: CP Plus Agentic Suite
+  version: "5.0.0"
+  description: >-
+    Three specialized tools for CP Plus CCTV/surveillance bid management:
+    RFP analysis, product catalog lookups, and compliance cross-matching.
+    Powered by Mistral AI (primary) with Google Gemini Flash fallback.
+  x-ibm-application-id: cp-plus-agent-suite
+  x-ibm-application-name: CP Plus Agent Suite
+
+servers:
+  - url: https://eab5-143-44-165-134.ngrok-free.app
+    description: "ngrok tunnel — update when tunnel restarts"
+
+x-ibm-skill-type: webapi
+x-ibm-skill-subtype: openapi
+x-ibm-conversational-skill: true
+
+paths:
+  /rfp/run:
+    post:
+      operationId: analyze_rfp
+      summary: RFP & Tender Document Analyst
+      description: >-
+        Use this tool when the user asks about RFP documents, tender analysis,
+        bid documents, or government procurement notices. This tool parses
+        uploaded RFP/tender PDFs to extract technical specifications, EMD
+        (Earnest Money Deposit) details, eligibility criteria, submission
+        deadlines, BOQ (Bill of Quantities), and NIT (Notice Inviting Tender)
+        information. It can answer natural language questions about any RFP
+        document. Provide 'query' with the user's question and optionally
+        'fileName' to target a specific RFP PDF. Use 'list_rfps' action to
+        show available RFP files. Use 'rfp_focus_section' action to extract
+        a specific section like 'Technical Specifications'.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                action:
+                  type: string
+                  enum:
+                    - rfp_chat
+                    - list_rfps
+                    - rfp_focus_section
+                  description: >-
+                    The task to perform. 'rfp_chat' — ask questions about RFP
+                    content. 'list_rfps' — list all available RFP PDF files.
+                    'rfp_focus_section' — extract a specific section from an RFP.
+                fileName:
+                  type: string
+                  description: >-
+                    The exact PDF filename of the RFP to analyze. Recommended
+                    for targeted queries. Example: 'Airport - Bhuj-RFP.pdf'.
+                    Use 'list_rfps' action first if the filename is unknown.
+                query:
+                  type: string
+                  description: >-
+                    The natural language question about the RFP. Examples:
+                    'What is the EMD amount?', 'List all technical specifications',
+                    'What are the eligibility criteria?', 'When is the submission deadline?'
+                sectionTitle:
+                  type: string
+                  description: >-
+                    Section name hint for 'rfp_focus_section' action.
+                    Example: 'Technical Specifications', 'Eligibility Criteria'.
+              required:
+                - action
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  answer:
+                    type: string
+                    description: >-
+                      The analysis result in Markdown format. May include
+                      tables, extracted specifications, and structured data.
+                      Display as is.
+        "400":
+          description: Bad Request — missing or invalid action/fileName
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: Human-readable error message
+        "413":
+          description: Request too large
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: Size limit exceeded message
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: Server error details
+
+  /product/run:
+    post:
+      operationId: lookup_product
+      summary: CP Plus Product Catalog Expert
+      description: >-
+        Use this tool when the user asks about CP Plus products, CCTV cameras,
+        NVRs, DVRs, surveillance equipment specifications, or product
+        recommendations. This tool queries the CP Plus product catalog of PDF
+        datasheets to retrieve full specifications, compare products, or
+        recommend equipment based on requirements. Provide 'query' with the
+        product name, model number, or feature requirement. Use 'list_products'
+        action to show all available product datasheets. Use 'product_search'
+        to find products by specific features like resolution, IP rating,
+        or camera type.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                action:
+                  type: string
+                  enum:
+                    - product_chat
+                    - list_products
+                    - product_search
+                  description: >-
+                    The task to perform. 'product_chat' — ask questions about
+                    products or get recommendations. 'list_products' — list all
+                    available product datasheets. 'product_search' — search
+                    products by feature or specification.
+                query:
+                  type: string
+                  description: >-
+                    The product question or search term. Examples:
+                    'Full specs of CP-UNC-DA21L3C-Q', 'Best 8MP dome camera
+                    with IP67', 'Compare all PTZ cameras'.
+              required:
+                - action
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  answer:
+                    type: string
+                    description: >-
+                      Product information in Markdown format. May include spec
+                      tables and comparison matrices. Display as is.
+        "400":
+          description: Bad Request — missing or invalid action
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: Human-readable error message
+        "413":
+          description: Request too large
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: Size limit exceeded message
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: Server error details
+
+  /matcher/run:
+    post:
+      operationId: match_compliance
+      summary: RFP-to-Product Compliance Matcher
+      description: >-
+        Use this tool when the user wants to compare CP Plus products against
+        RFP requirements, generate compliance matrices, perform gap analysis,
+        or cross-match products with tender specifications. This tool reads
+        both an RFP document and product datasheets, then performs strict
+        feature-by-feature comparison (resolution, lens, IR range, WDR,
+        IP rating, codec, storage, PoE) to determine compliance status.
+        Provide 'fileName' with the RFP PDF name and 'query' with the
+        comparison instruction. Use 'crossmatch_rfp' for full compliance
+        reports. Use 'matcher_chat' for focused checks on specific requirements.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                action:
+                  type: string
+                  enum:
+                    - matcher_chat
+                    - crossmatch_rfp
+                  description: >-
+                    The task to perform. 'crossmatch_rfp' — generate a full
+                    compliance matrix comparing all relevant CP Plus products
+                    against the RFP. 'matcher_chat' — focused compliance check
+                    on specific products or requirements.
+                fileName:
+                  type: string
+                  description: >-
+                    The exact RFP PDF filename to cross-match against. Required.
+                    Example: 'Airport - Bhuj-RFP.pdf'. Use the analyze_rfp tool
+                    with 'list_rfps' action first if the filename is unknown.
+                query:
+                  type: string
+                  description: >-
+                    The comparison instruction. Examples: 'Generate full
+                    compliance matrix', 'Show only gaps', 'Check CP-UNC-DA21L3C-Q
+                    against this RFP', 'Which cameras meet the IP67 requirement?'
+              required:
+                - action
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  answer:
+                    type: string
+                    description: >-
+                      Compliance analysis in Markdown format. Includes
+                      compliance matrices with indicators, gap tables,
+                      and recommendations. Display as is.
+        "400":
+          description: Bad Request — missing fileName or invalid action
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: Human-readable error message
+        "413":
+          description: Request too large
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: Size limit exceeded message
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: Server error details

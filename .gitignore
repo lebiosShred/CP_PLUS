@@ -1,0 +1,41 @@
+# =============================================================================
+# CP Plus Agentic Suite — .gitignore
+# =============================================================================
+
+# --- Secrets ---
+.env
+!.env.example
+
+# --- Security Config Output ---
+wxo_security_config/
+*.pem
+
+# --- Python ---
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+dist/
+build/
+.venv/
+.alt_env/
+
+# --- Vector DBs (large binary files) ---
+*_vector_db/
+
+# --- IDE ---
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# --- OS ---
+Thumbs.db
+.DS_Store
+
+# --- Logs ---
+*.log
+
+# --- Generated Output ---
+output/
