@@ -1,0 +1,82 @@
+{
+    "CP-E25Q.pdf": {
+        "uri": "https://generativelanguage.googleapis.com/v1beta/files/4gchhwmvdheu",
+        "name": "files/4gchhwmvdheu",
+        "mime_type": "application/pdf"
+    },
+    "CP-E38Q.pdf": {
+        "uri": "https://generativelanguage.googleapis.com/v1beta/files/ur9yrxlba2x0",
+        "name": "files/ur9yrxlba2x0",
+        "mime_type": "application/pdf"
+    },
+    "CP-UNC-DA21L3C-Q.pdf": {
+        "uri": "https://generativelanguage.googleapis.com/v1beta/files/tfdlc3qhcb0j",
+        "name": "files/tfdlc3qhcb0j",
+        "mime_type": "application/pdf"
+    },
+    "CP-UNC-DA41L3C-D-Q.pdf": {
+        "uri": "https://generativelanguage.googleapis.com/v1beta/files/3xgcrn86m3xg",
+        "name": "files/3xgcrn86m3xg",
+        "mime_type": "application/pdf"
+    },
+    "CP-UNC-TA21L3C-Q.pdf": {
+        "uri": "https://generativelanguage.googleapis.com/v1beta/files/0wtq6w1rbb4w",
+        "name": "files/0wtq6w1rbb4w",
+        "mime_type": "application/pdf"
+    },
+    "CP-UNC-TA41L3C-D-Q.pdf": {
+        "uri": "https://generativelanguage.googleapis.com/v1beta/files/q7bmau0lxeve",
+        "name": "files/q7bmau0lxeve",
+        "mime_type": "application/pdf"
+    },
+    "CP-UNC-TA41L6C-Q.pdf": {
+        "uri": "https://generativelanguage.googleapis.com/v1beta/files/vg64pksewgz3",
+        "name": "files/vg64pksewgz3",
+        "mime_type": "application/pdf"
+    },
+    "CP-UNC-TE21ZL6C-VMDS-Q.pdf": {
+        "uri": "https://generativelanguage.googleapis.com/v1beta/files/9kihubti1iau",
+        "name": "files/9kihubti1iau",
+        "mime_type": "application/pdf"
+    },
+    "CP-UNC-TE81ZL6C-VMDS-Q.pdf": {
+        "uri": "https://generativelanguage.googleapis.com/v1beta/files/xagewyklsfdx",
+        "name": "files/xagewyklsfdx",
+        "mime_type": "application/pdf"
+    },
+    "CP-UNC-VE21ZL4C-VMDS-Q.pdf": {
+        "uri": "https://generativelanguage.googleapis.com/v1beta/files/7zfw8ziuhtyb",
+        "name": "files/7zfw8ziuhtyb",
+        "mime_type": "application/pdf"
+    },
+    "CP-UNC-WE21L3C-MDS-Q.pdf": {
+        "uri": "https://generativelanguage.googleapis.com/v1beta/files/uzqhdmo6eliy",
+        "name": "files/uzqhdmo6eliy",
+        "mime_type": "application/pdf"
+    },
+    "CP-UNR-104F1.pdf": {
+        "uri": "https://generativelanguage.googleapis.com/v1beta/files/cnbfg0pxzv6q",
+        "name": "files/cnbfg0pxzv6q",
+        "mime_type": "application/pdf"
+    },
+    "CP-UNR-108F1.pdf": {
+        "uri": "https://generativelanguage.googleapis.com/v1beta/files/vj6848zmj83o",
+        "name": "files/vj6848zmj83o",
+        "mime_type": "application/pdf"
+    },
+    "CP-UNR-216F2-I2.pdf": {
+        "uri": "https://generativelanguage.googleapis.com/v1beta/files/c9jyy5xqjat7",
+        "name": "files/c9jyy5xqjat7",
+        "mime_type": "application/pdf"
+    },
+    "CP-UNR-4K5162-FI.pdf": {
+        "uri": "https://generativelanguage.googleapis.com/v1beta/files/itu492sb4fqt",
+        "name": "files/itu492sb4fqt",
+        "mime_type": "application/pdf"
+    },
+    "CP-UNR-4K532R8-FI.pdf": {
+        "uri": "https://generativelanguage.googleapis.com/v1beta/files/fxft05lyp57a",
+        "name": "files/fxft05lyp57a",
+        "mime_type": "application/pdf"
+    }
+}

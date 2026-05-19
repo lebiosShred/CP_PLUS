@@ -1,0 +1,11 @@
+# CP Plus Agentic Suite — Backend Dependencies
+flask>=3.0
+flask-cors>=4.0
+flask-limiter>=3.5
+mistralai>=1.0
+pypdf>=4.0
+python-dotenv>=1.0
+requests>=2.31
+
+# Gemini fallback (Tier 3)
+google-generativeai>=0.8
